@@ -17,22 +17,25 @@ BookingRepository bookingRepository;
 
     @Override
     public Booking addBooking(Booking booking, Integer carpoolingID) {
-        Carpooling carpooling = carpoolingRepository.findById(carpoolingID).orElseThrow(() -> new IllegalArgumentException("Invalid carpooling ID"));
- Integer nb=booking.getNb();
+        Carpooling carpooling = carpoolingRepository.findById(carpoolingID)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid carpooling ID"));
+        Integer nb = booking.getNb();
+
         if (carpooling.getAvailableSeats() <= 0) {
             throw new IllegalStateException("No available seats for this carpooling");
+        } else if (carpooling.getAvailableSeats() - nb >= 0) {
+            int updatedAvailableSeats = carpooling.getAvailableSeats() - nb;
+            carpooling.setAvailableSeats(updatedAvailableSeats);
+            carpoolingRepository.save(carpooling);
         }
 
         // Decrease the number of available seats
-        if(carpooling.getAvailableSeats() - nb>0){
-        int updatedAvailableSeats = carpooling.getAvailableSeats() - nb;
-        carpooling.setAvailableSeats(updatedAvailableSeats);
-        carpoolingRepository.save(carpooling);}
 
         // Assign the carpooling to the booking
         booking.setCarpooling(carpooling);
         return bookingRepository.save(booking);
     }
+
 
     @Override
     public void deleteBooking(Integer bookingId) {
