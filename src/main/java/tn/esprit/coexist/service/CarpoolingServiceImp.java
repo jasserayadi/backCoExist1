@@ -45,6 +45,20 @@ CarpoolingRepository carpoolingRepository;
     }
 
     @Override
+    public Carpooling updateCarpooling(Carpooling carpooling) {
+        if (carpooling.getCarpoolingType().equals(CarpoolingType.DAILY)) {
+            carpooling.setDepartureTime(null);
+            log.info("sssssssss");
+        } else {
+            carpooling.setDay(null);
+            carpooling.setTime(null);
+            log.info("aaaaaaaaa");
+        }
+        return carpoolingRepository.save(carpooling);
+
+    }
+
+    @Override
     public List<Carpooling> getAllCarpooling() {
         return carpoolingRepository.findAll();
     }
@@ -107,6 +121,11 @@ CarpoolingRepository carpoolingRepository;
                 carpoolingType,
                 registrationNumber
         );
+    }
+
+    @Override
+    public List<Carpooling> findByCarpoolingType(CarpoolingType carpoolingType) {
+        return carpoolingRepository.findByCarpoolingType(carpoolingType);
     }
 
 

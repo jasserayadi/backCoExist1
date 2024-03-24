@@ -13,6 +13,7 @@ public interface CarpoolingService {
     public Carpooling addCarpooling(Carpooling carpooling);
     public void delateCarpooling(Integer idCarpooling);
     public void updateCarpooling(Integer carpoolingId ,Carpooling carpooling);
+    public Carpooling updateCarpooling(Carpooling carpooling);
     public List<Carpooling> getAllCarpooling();
     public Carpooling findCarpooling(Integer carpoolingId);
     public List<Carpooling> findByLongitudeDepartureAndLatitudeDeparture(String longitudeDeparture, String latitudeDeparture);
@@ -34,5 +35,6 @@ public interface CarpoolingService {
             Long registrationNumber
 
     );
+    public List<Carpooling>findByCarpoolingType(CarpoolingType carpoolingType);
 
     }

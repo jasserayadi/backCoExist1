@@ -7,6 +7,7 @@ import tn.esprit.coexist.service.PreferenceService;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin("*")
 public class PreferenceController {
     PreferenceService preferenceService;
     @PostMapping("/addPreference")

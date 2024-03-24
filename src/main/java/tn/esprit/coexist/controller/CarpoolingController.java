@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin("*")
 public class CarpoolingController {
     CarpoolingService carpoolingService;
     BookingService bookingService;
@@ -35,6 +36,12 @@ public void delateCarpooling(@PathVariable Integer carpoolingId){
     carpoolingService.updateCarpooling(carpoolingId,carpooling);
 
     }
+    @PutMapping("/updateCarpooling")
+    public Carpooling updateCarpooling( @RequestBody Carpooling carpooling){
+       return carpoolingService.updateCarpooling(carpooling);
+
+    }
+
     @GetMapping("getAllCarpooling")
     public List<Carpooling> getAllCarpooling(){
 return carpoolingService.getAllCarpooling();
@@ -87,5 +94,9 @@ return carpoolingService.findByLongitudeDepartureAndLatitudeDepartureAndDepartur
                 registrationNumber
         );
     }
+    @GetMapping("/findByCarpoolingType/{carpoolingType}")
+    List<Carpooling> findByCarpoolingType(@PathVariable CarpoolingType carpoolingType){
+    return carpoolingService.findByCarpoolingType(carpoolingType);
 
+    }
 }
