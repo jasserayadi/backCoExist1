@@ -14,4 +14,10 @@ FeedBackRepository feedBackRepository;
     public FeedBack addFedback(FeedBack feedBack) {
         return feedBackRepository.save(feedBack);
     }
+
+    @Override
+    public void updateFeedback(Integer feedBackId, FeedBack feedBack) {
+        feedBack.setFeedBackId(feedBackId);
+        feedBackRepository.save(feedBack);
+    }
 }

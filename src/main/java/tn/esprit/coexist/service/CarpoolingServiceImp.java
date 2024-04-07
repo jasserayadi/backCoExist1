@@ -3,6 +3,9 @@ package tn.esprit.coexist.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import tn.esprit.coexist.entity.Carpooling;
 import tn.esprit.coexist.entity.CarpoolingType;
@@ -20,8 +23,11 @@ import java.util.List;
 public class CarpoolingServiceImp implements CarpoolingService{
 CarpoolingRepository carpoolingRepository;
 
+
     @Override
     public Carpooling addCarpooling(Carpooling carpooling) {
+
+        sendDelateCarpoolingEmail();
         if (carpooling.getCarpoolingType().equals(CarpoolingType.DAILY)) {
             carpooling.setDepartureTime(null);
             log.info("sssssssss");
@@ -35,7 +41,32 @@ CarpoolingRepository carpoolingRepository;
 
     @Override
     public void delateCarpooling(Integer carpoolingId) {
+      Carpooling carpooling=carpoolingRepository.findById(carpoolingId).get();
         carpoolingRepository.deleteById(carpoolingId);
+        SimpleMailMessage message = new SimpleMailMessage();
+        String Newligne = System.getProperty("line.separator");
+        String url = "http://localhost:4200/addCarpooling";
+        message.setFrom("srayen60@gmail.com");
+        message.setTo("ayadi.jasser@esprit.tn");
+        message.setSubject("carpooling delated!");
+        message.setText("Hi,\n\n\n" +
+                "Apologies for misunderstanding. If you meant to say \"deleted\" instead of \"delayed,\" you can announce it as follows:\n" +
+                "\n" +
+                "Subject: Carpooling Update: Cancellation\n" +
+                "\n" +
+                "Dear [Carpool Participants],\n" +
+                "\n" +
+                "I hope this message finds you well. Unfortunately, I must inform you that one of carpoolings "+"(carpoolingId:"+carpoolingId+"\n carpooling type"+carpooling.getCarpoolingType()+" )arrangement  has been canceled.\n"
+                +
+                " we are unable to proceed with the planned carpooling.\n" +
+                "\n" +
+                "Please make alternative arrangements for your transportation needs on that day.\n" +
+                "\n" +
+                "I apologize for any inconvenience this may cause and appreciate your understanding.\n" +
+                "\n" +
+                "Thank you for your cooperation.\n \nBest regards,\nThe [COEXIST] Team\");" + Newligne +url);
+        javaMailSender.send(message);
+
     }
 
     @Override
@@ -72,6 +103,7 @@ CarpoolingRepository carpoolingRepository;
     public List<Carpooling> findByLongitudeDepartureAndLatitudeDeparture(String longitudeDeparture, String latitudeDeparture) {
 
         return carpoolingRepository.findByLongitudeDepartureAndLatitudeDeparture(longitudeDeparture, latitudeDeparture);
+
     }
 
     @Override
@@ -125,7 +157,42 @@ CarpoolingRepository carpoolingRepository;
 
     @Override
     public List<Carpooling> findByCarpoolingType(CarpoolingType carpoolingType) {
+
         return carpoolingRepository.findByCarpoolingType(carpoolingType);
+
+    }
+
+    @Override
+    public List<Carpooling> findByDay(Day day) {
+        return carpoolingRepository.findByDay(day);
+    }
+    @Autowired
+    private JavaMailSender javaMailSender;
+    @Override
+    public void sendDelateCarpoolingEmail() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        String Newligne = System.getProperty("line.separator");
+        String url = "http://localhost:4200/addCarpooling";
+        message.setFrom("srayen60@gmail.com");
+        message.setTo("ayadi.jasser@esprit.tn");
+        message.setSubject("carpooling delated!");
+        message.setText("Hi,\n\n\n" +
+                "Apologies for misunderstanding. If you meant to say \"deleted\" instead of \"delayed,\" you can announce it as follows:\n" +
+                "\n" +
+                "Subject: Carpooling Update: Cancellation\n" +
+                "\n" +
+                "Dear [Carpool Participants],\n" +
+                "\n" +
+                "I hope this message finds you well. Unfortunately, I must inform you that one of carpoolings arrangement  has been canceled.\n"
+                 +
+                " we are unable to proceed with the planned carpooling.\n" +
+                "\n" +
+                "Please make alternative arrangements for your transportation needs on that day.\n" +
+                "\n" +
+                "I apologize for any inconvenience this may cause and appreciate your understanding.\n" +
+                "\n" +
+                "Thank you for your cooperation.\n \nBest regards,\nThe [COEXIST] Team\");" + Newligne +url);
+        javaMailSender.send(message);
     }
 
 

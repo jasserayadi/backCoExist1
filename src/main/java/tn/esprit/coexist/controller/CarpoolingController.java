@@ -99,4 +99,8 @@ return carpoolingService.findByLongitudeDepartureAndLatitudeDepartureAndDepartur
     return carpoolingService.findByCarpoolingType(carpoolingType);
 
     }
+    @GetMapping("/findByDay/{day}")
+    List<Carpooling> findByDay(@PathVariable Day day){
+    return carpoolingService.findByDay(day);
+    }
 }

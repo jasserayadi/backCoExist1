@@ -36,5 +36,6 @@ public interface CarpoolingService {
 
     );
     public List<Carpooling>findByCarpoolingType(CarpoolingType carpoolingType);
-
+public List<Carpooling> findByDay(Day day);
+    public void sendDelateCarpoolingEmail();
     }
